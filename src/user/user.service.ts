@@ -35,15 +35,64 @@ export class UserService {
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<UserDocument | null> {
-    if (updateUserDto.password) {
-      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+    const existingUser = await this.userModel.findById(id).exec();
+    if (!existingUser) {
+      return null;
     }
+
+    // Create an object to hold the fields to update
+    const fieldsToUpdate: any = { ...updateUserDto }; // Start with DTO fields
+
+    if (updateUserDto.password) {
+      fieldsToUpdate.password = await bcrypt.hash(updateUserDto.password, 10);
+    }
+
+    // Apply DTO fields to a temporary object to recalculate profileComplete
+    // This is important because existingUser might not have all DTO fields yet
+    const tempUserForProfileCheck = { ...existingUser.toObject(), ...fieldsToUpdate };
+
+    // Recalculate profileComplete based on the combined data
+    fieldsToUpdate.profileComplete = this.isProfileComplete(tempUserForProfileCheck as UserDocument);
+
+    // Use findByIdAndUpdate to perform the update atomically
     return this.userModel
-      .findByIdAndUpdate(id, updateUserDto, { new: true })
+      .findByIdAndUpdate(id, { $set: fieldsToUpdate }, { new: true })
       .exec();
+  }
+
+  private isProfileComplete(user: UserDocument): boolean {
+    // Define the fields that must be present for a profile to be considered complete
+    const requiredFields = [
+      'phone',
+      'dni',
+      'birthDate',
+      'address',
+      'city',
+      'province',
+      'zipCode',
+      'occupation',
+      'monthlyIncome',
+      'investmentExperience',
+      'preferredContactMethod',
+      'interestedLotSize',
+      'budget',
+      'timeline',
+    ];
+
+    for (const field of requiredFields) {
+      // Check if the field exists and is not null, undefined, or an empty string
+      if (!user[field] || user[field].toString().trim() === '') {
+        return false;
+      }
+    }
+    return true;
   }
 
   async remove(id: string): Promise<UserDocument | null> {
     return this.userModel.findByIdAndDelete(id).exec();
+  }
+
+  async findAssignableUsers(): Promise<UserDocument[]> {
+    return this.userModel.find({ roles: { $in: ['admin', 'vendedor'] } }).exec();
   }
 }

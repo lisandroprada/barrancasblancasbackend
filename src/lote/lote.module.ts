@@ -10,5 +10,6 @@ import { Lote, LoteSchema } from './entities/lote.entity';
   ],
   controllers: [LoteController],
   providers: [LoteService],
+  exports: [LoteService], // Export LoteService
 })
 export class LoteModule {}

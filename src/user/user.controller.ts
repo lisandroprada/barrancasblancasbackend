@@ -38,6 +38,12 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @Get('assignable')
+  @Roles('admin') // Only admin can get the list of assignable users
+  findAssignable() {
+    return this.userService.findAssignableUsers();
+  }
+
   @Patch(':id')
   @Roles('admin')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {

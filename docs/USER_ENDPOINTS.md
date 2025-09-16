@@ -96,7 +96,16 @@ Retorna un usuario específico. **Rol Requerido:** `admin`.
 - **URL:** `/user/:id`
 - **Respuesta Exitosa (200):** Devuelve el objeto de usuario completo.
 
-### 4. Actualizar un Usuario (Completar Perfil)
+### 4. Obtener Usuarios Asignables (Admin/Vendedor)
+
+Retorna un listado de todos los usuarios que tienen el rol `admin` o `vendedor`. Este endpoint es útil para asignar leads o tareas a miembros del equipo de ventas.
+
+- **Método:** `GET`
+- **URL:** `/user/assignable`
+- **Rol Requerido:** `admin`
+- **Respuesta Exitosa (200):** Devuelve un arreglo de objetos de usuario, incluyendo solo los campos relevantes para la asignación (ej. `_id`, `name`, `email`, `roles`).
+
+### 5. Actualizar un Usuario (Completar Perfil)
 
 Actualiza los datos de un usuario. Se pueden enviar solo los campos que se desean modificar. **Rol Requerido:** `admin` (o el propio usuario, si se implementa esa lógica).
 
@@ -109,7 +118,7 @@ Actualiza los datos de un usuario. Se pueden enviar solo los campos que se desea
   "name": "Nombre Actualizado",
   "phone": "1122334455",
   "dni": "12345678",
-  "birthDate": "1990-01-15T00:00:00.000Z",
+  "birthDate": "1990-01-15T00:00:00.000Z", // Formato ISO 8601
   "address": "Calle Falsa 123",
   "city": "Springfield",
   "province": "Provincia Falsa",
@@ -124,9 +133,9 @@ Actualiza los datos de un usuario. Se pueden enviar solo los campos que se desea
 }
 ```
 
-- **Respuesta Exitosa (200):** Devuelve el objeto de usuario actualizado. El campo `profileComplete` se recalculará automáticamente en el backend.
+- **Respuesta Exitosa (200):** Devuelve el objeto de usuario actualizado. El campo `profileComplete` se recalculará automáticamente en el backend **basándose en la presencia de los campos de perfil requeridos**.
 
-### 5. Eliminar un Usuario
+### 6. Eliminar un Usuario
 
 Elimina un usuario. **Rol Requerido:** `admin`.
 

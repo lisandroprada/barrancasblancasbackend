@@ -5,6 +5,7 @@ import { DatabaseModule } from './database/database.module';
 import { LoteModule } from './lote/lote.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { LeadModule } from './lead/lead.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 
@@ -21,6 +22,7 @@ import * as Joi from 'joi';
     LoteModule,
     UserModule,
     AuthModule,
+    LeadModule,
   ],
   controllers: [AppController],
   providers: [AppService],
