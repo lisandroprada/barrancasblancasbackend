@@ -10,8 +10,8 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
-  @IsNotEmpty()
-  password: string;
+  @IsOptional()
+  password?: string; // Made optional as backend will generate it for simplified registration
 
   @IsArray()
   @IsString({ each: true })

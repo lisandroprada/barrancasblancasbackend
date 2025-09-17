@@ -18,6 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: { sub: string; username: string; roles: string[] }) {
+    console.log('JWT Strategy validate called with payload:', payload);
     return {
       userId: payload.sub,
       username: payload.username,

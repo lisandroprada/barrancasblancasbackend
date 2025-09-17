@@ -8,7 +8,7 @@ import {
   IsArray,
   IsBoolean,
 } from 'class-validator';
-import { Caracteristicas, LoteStatus, Propietario } from '../entities/lote.entity'; // Import LoteStatus
+import { Caracteristicas, LoteStatus, Propietario, SalesProcessStatus } from '../entities/lote.entity'; // Import LoteStatus and SalesProcessStatus
 
 export class CreateLoteDto {
   @IsString()
@@ -46,6 +46,10 @@ export class CreateLoteDto {
   @IsEnum(Propietario)
   @IsNotEmpty()
   propietario: Propietario;
+
+  @IsEnum(SalesProcessStatus)
+  @IsOptional()
+  estadoProcesoVenta?: SalesProcessStatus;
 
   @IsBoolean()
   @IsOptional()

@@ -6,6 +6,7 @@ import { LoteModule } from './lote/lote.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { LeadModule } from './lead/lead.module';
+import { NotificationModule } from './notification/notification.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 
@@ -16,6 +17,11 @@ import * as Joi from 'joi';
       validationSchema: Joi.object({
         DATABASE_URL: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
+        MAIL_HOST: Joi.string().required(),
+        MAIL_PORT: Joi.number().required(),
+        MAIL_USER: Joi.string().required(),
+        MAIL_PASS: Joi.string().required(),
+        MAIL_FROM: Joi.string().email().required(),
       }),
     }),
     DatabaseModule,
@@ -23,6 +29,7 @@ import * as Joi from 'joi';
     UserModule,
     AuthModule,
     LeadModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

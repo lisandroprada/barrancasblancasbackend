@@ -102,3 +102,4 @@ A continuación se detallan los módulos principales y el estado de sus funciona
 *   **Notificaciones:** Implementar un sistema de notificaciones (ej. por correo electrónico) para eventos importantes (cambios de estado de lote, nuevas reservas, etc.).
 *   **Módulo de Reservas/Transacciones:** Desarrollar un módulo específico para gestionar el proceso de reserva y venta de lotes de forma más estructurada.
 *   **Optimización de Consultas:** Revisar y optimizar las consultas a la base de datos para asegurar un rendimiento óptimo a medida que crece el volumen de datos.
+*   **Integración con Módulo Lotes:** Ampliar el módulo de Lotes para reflejar el estado del proceso de ventas (ej. `'Reservado'`, `'En negociación'`) y no solo `'Disponible'` o `'Vendido'`. **(Implementado: Campo `estadoProcesoVenta` añadido a la entidad Lote)**

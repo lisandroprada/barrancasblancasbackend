@@ -2,9 +2,99 @@
 
 Esta documentación describe los endpoints para gestionar usuarios en el sistema.
 
-## Autenticación
+## Autenticación (Pública)
 
-Todas las solicitudes a estos endpoints deben incluir un token JWT en el encabezado de autorización:
+Estos endpoints no requieren un token JWT.
+
+### 1. Iniciar Sesión (Login)
+
+Autentica a un usuario y devuelve un token JWT.
+
+- **Método:** `POST`
+- **URL:** `/auth/login`
+- **Cuerpo de la Solicitud (`application/json`):**
+
+```json
+{
+  "email": "usuario@example.com",
+  "password": "unaContraseñaSegura"
+}
+```
+
+- **Respuesta Exitosa (200):** Devuelve un objeto con el token de acceso.
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+- **Respuesta de Error (401 Unauthorized):** Si las credenciales son inválidas.
+
+```json
+{
+  "statusCode": 401,
+  "message": "Unauthorized"
+}
+```
+
+### 2. Registrar Usuario (Register)
+
+Crea un nuevo usuario en el sistema.
+
+- **Método:** `POST`
+- **URL:** `/auth/register`
+- **Cuerpo de la Solicitud (`application/json`):**
+
+```json
+{
+  "name": "Nombre del Nuevo Usuario",
+  "email": "nuevo.usuario@example.com",
+  "phone": "1122334455"
+}
+```
+
+- **Respuesta Exitosa (201 Created):** Devuelve el objeto de usuario recién creado (sin la contraseña, ya que se envía por email).
+
+```json
+{
+  "_id": "60d5ecb8b4850b4f8c5a3a21",
+  "name": "Nombre del Nuevo Usuario",
+  "email": "nuevo.usuario@example.com",
+  "phone": "1122334455",
+  "roles": ["user"],
+  "profileComplete": false,
+  "documents": [],
+  "createdAt": "2025-09-13T10:00:00.000Z",
+  "updatedAt": "2025-09-13T10:00:00.000Z"
+}
+```
+
+- **Respuesta de Error (409 Conflict):** Si el email ya está registrado.
+
+```json
+{
+  "statusCode": 409,
+  "message": "User with email nuevo.usuario@example.com already exists",
+  "error": "Conflict"
+}
+```
+
+- **Respuesta de Error (400 Bad Request):** Si la validación del cuerpo de la solicitud falla.
+
+```json
+{
+  "statusCode": 400,
+  "message": ["email must be an email"],
+  "error": "Bad Request"
+}
+```
+
+---
+
+## Autenticación (Protegida)
+
+Todas las solicitudes a estos endpoints deben incluir un token JWT válido en el encabezado de autorización:
 
 `Authorization: Bearer <token>`
 
@@ -90,10 +180,11 @@ Retorna un arreglo con todos los usuarios. **Rol Requerido:** `admin`.
 
 ### 3. Obtener un Usuario por ID
 
-Retorna un usuario específico. **Rol Requerido:** `admin`.
+Retorna un usuario específico.
 
 - **Método:** `GET`
 - **URL:** `/user/:id`
+- **Roles Requeridos:** `admin` (para obtener cualquier usuario) O el propio usuario (para obtener su propio perfil).
 - **Respuesta Exitosa (200):** Devuelve el objeto de usuario completo.
 
 ### 4. Obtener Usuarios Asignables (Admin/Vendedor)

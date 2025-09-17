@@ -6,9 +6,10 @@ import { Lead, LeadSchema } from './entities/lead.entity';
 import { Activity, ActivitySchema } from './entities/activity.entity';
 import { Proposal, ProposalSchema } from './entities/proposal.entity';
 import { PurchaseTicket, PurchaseTicketSchema } from './entities/purchase-ticket.entity';
-import { UserService } from '../user/user.service'; // Import UserService
-import { UserModule } from '../user/user.module'; // Import UserModule
-import { LoteModule } from '../lote/lote.module'; // Import LoteModule
+import { UserModule } from '../user/user.module';
+import { LoteModule } from '../lote/lote.module';
+import { APP_GUARD } from '@nestjs/core'; // Import APP_GUARD
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'; // Import JwtAuthGuard
 
 @Module({
   imports: [
@@ -18,11 +19,17 @@ import { LoteModule } from '../lote/lote.module'; // Import LoteModule
       { name: Proposal.name, schema: ProposalSchema },
       { name: PurchaseTicket.name, schema: PurchaseTicketSchema },
     ]),
-    UserModule, // Import UserModule to make UserService available
-    LoteModule, // Import LoteModule to make LoteService available
+    UserModule,
+    LoteModule,
   ],
   controllers: [LeadController],
-  providers: [LeadService],
+  providers: [
+    LeadService,
+    {
+      provide: APP_GUARD, // Provide JwtAuthGuard globally for this module
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class LeadModule {}
 

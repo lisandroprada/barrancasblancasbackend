@@ -18,10 +18,12 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
+    console.log('--- RolesGuard: canActivate ---');
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
+    console.log('RolesGuard: isPublic:', isPublic);
     if (isPublic) {
       return true;
     }
@@ -30,11 +32,16 @@ export class RolesGuard implements CanActivate {
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
     );
+    console.log('RolesGuard: requiredRoles:', requiredRoles);
     if (!requiredRoles) {
+      console.log('RolesGuard: No required roles, allowing access.');
       return true;
     }
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const { user } = request;
-    return requiredRoles.some((role) => user.roles?.includes(role));
+    console.log('RolesGuard: User roles:', user ? user.roles : 'N/A');
+    const hasRole = requiredRoles.some((role) => user.roles?.includes(role));
+    console.log('RolesGuard: User has required role:', hasRole);
+    return hasRole;
   }
 }

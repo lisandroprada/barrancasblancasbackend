@@ -27,6 +27,7 @@ A continuación se describe la estructura del objeto `Lote`.
   "metros_frente": "number",
   "caracteristicas": ["vista_al_mar" | "contra_frente" | "lateral"],
   "propietario": "FANE" | "HENRY" | "CAUTIO",
+  "estadoProcesoVenta": "Disponible" | "En negociación" | "Reservado" | "Vendido",
   "featured": "boolean",
   "client": {
     "_id": "string",
@@ -73,6 +74,7 @@ Permite dar de alta un nuevo lote en el sistema.
   "metros_frente": 10,
   "caracteristicas": ["vista_al_mar"],
   "propietario": "FANE",
+  "estadoProcesoVenta": "Disponible",
   "featured": true,
   "clientId": "60d5ec49f8c7a1001c8e4d5a", // Opcional: ID del usuario cliente
   "status": "disponible"

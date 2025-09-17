@@ -21,6 +21,13 @@ export enum Propietario {
   CAUTIO = 'CAUTIO',
 }
 
+export enum SalesProcessStatus {
+  DISPONIBLE = 'Disponible',
+  EN_NEGOCIACION = 'En negociación',
+  RESERVADO = 'Reservado',
+  VENDIDO = 'Vendido',
+}
+
 @Schema()
 export class StatusChangeLog {
   @Prop({ required: true, enum: LoteStatus })
@@ -63,6 +70,9 @@ export class Lote {
 
   @Prop({ required: true, enum: Propietario })
   propietario: Propietario;
+
+  @Prop({ required: true, enum: SalesProcessStatus, default: SalesProcessStatus.DISPONIBLE })
+  estadoProcesoVenta: SalesProcessStatus;
 
   @Prop({ default: false })
   featured: boolean;

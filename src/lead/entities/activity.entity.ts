@@ -2,18 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import { Lead } from './lead.entity'; // Import Lead entity
 import { User } from '../../user/entities/user.entity'; // Import User entity
+import { ActivityType } from '../dto/create-activity.dto'; // Import ActivityType enum from DTO
 
 export type ActivityDocument = Activity & Document;
 
-export enum ActivityType {
-  LLAMADA = 'Llamada',
-  EMAIL = 'Email',
-  VISITA = 'Visita',
-  REUNION = 'Reunión',
-  // Add other activity types as needed
-}
-
-@Schema()
+@Schema({ timestamps: true }) // Added timestamps
 export class Activity {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Lead', required: true })
   lead: Types.ObjectId | Lead; // Reference to the Lead
@@ -25,13 +18,41 @@ export class Activity {
   fecha: Date;
 
   @Prop()
-  comentarios: string;
+  comentarios?: string; // Made optional
 
   @Prop({ required: false })
   proximoPaso?: string;
 
+  // --- Specific fields based on ActivityType ---
+  @Prop()
+  numeroContacto?: string;
+
+  @Prop()
+  asuntoEmail?: string;
+
+  @Prop()
+  destinatarioEmail?: string;
+
+  @Prop()
+  fechaProgramada?: Date; // Stored as Date object
+
+  @Prop()
+  ubicacion?: string;
+
+  @Prop()
+  nombreDocumento?: string;
+
+  @Prop()
+  urlDocumento?: string;
+
+  @Prop()
+  fechaVencimientoTarea?: Date; // Stored as Date object
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
+  responsableTareaId?: Types.ObjectId | User; // Reference to User
+
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
-  creadoPor: Types.ObjectId | User; // User who created the activity
+  registradoPor: Types.ObjectId | User; // User who registered the activity (renamed from creadoPor)
 }
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);
