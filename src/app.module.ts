@@ -22,6 +22,7 @@ import * as Joi from 'joi';
         MAIL_USER: Joi.string().required(),
         MAIL_PASS: Joi.string().required(),
         MAIL_FROM: Joi.string().email().required(),
+        CORS_ORIGINS: Joi.string().required(),
       }),
     }),
     DatabaseModule,

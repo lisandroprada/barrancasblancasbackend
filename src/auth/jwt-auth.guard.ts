@@ -14,18 +14,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log('--- JwtAuthGuard: canActivate ---');
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
-    console.log('JwtAuthGuard: isPublic:', isPublic);
     if (isPublic) {
       return true;
     }
 
     const result = (await super.canActivate(context)) as boolean;
-    console.log('JwtAuthGuard: super.canActivate result:', result);
 
     if (!result) {
       throw new UnauthorizedException();
