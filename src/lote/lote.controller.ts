@@ -88,4 +88,11 @@ export class LoteController {
   remove(@Param('id') id: string) {
     return this.loteService.remove(id);
   }
+
+  @Delete('admin/clear-client-references')
+  @Roles('admin')
+  async clearClientReferences() {
+    const updatedCount = await this.loteService.clearClientReferences();
+    return { message: `Cleared client references for ${updatedCount} lots.` };
+  }
 }

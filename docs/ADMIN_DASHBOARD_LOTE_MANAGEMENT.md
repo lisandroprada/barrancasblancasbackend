@@ -157,6 +157,21 @@ Elimina un lote del sistema de forma permanente.
 - **Rol Requerido:** `admin`
 - **Respuesta Exitosa (200):** Devuelve el objeto del lote que fue eliminado.
 
+### 6. Limpiar Referencias de Clientes en Lotes
+
+Este endpoint permite eliminar todas las referencias de clientes (`client` a `null`) de todos los lotes en el sistema.
+
+- **Método:** `DELETE`
+- **URL:** `/lote/admin/clear-client-references`
+- **Rol Requerido:** `admin`
+- **Respuesta Exitosa (200):** Devuelve un mensaje indicando cuántos lotes fueron actualizados.
+
+```json
+{
+  "message": "Cleared client references for X lots."
+}
+```
+
 ---
 
 ## Endpoints Públicos

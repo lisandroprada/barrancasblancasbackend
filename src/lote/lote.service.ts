@@ -85,4 +85,12 @@ export class LoteService {
 
     return { lots, metadata };
   }
+
+  async clearClientReferences(): Promise<number> {
+    const result = await this.loteModel.updateMany(
+      { client: { $ne: null } },
+      { $set: { client: null } },
+    ).exec();
+    return result.modifiedCount;
+  }
 }
