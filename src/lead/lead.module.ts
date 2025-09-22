@@ -6,6 +6,7 @@ import { Lead, LeadSchema } from './entities/lead.entity';
 import { Activity, ActivitySchema } from './entities/activity.entity';
 import { Proposal, ProposalSchema } from './entities/proposal.entity';
 import { PurchaseTicket, PurchaseTicketSchema } from './entities/purchase-ticket.entity';
+import { LeadSubmission, LeadSubmissionSchema } from './entities/lead-submission.entity'; // Import LeadSubmission
 import { UserModule } from '../user/user.module';
 import { LoteModule } from '../lote/lote.module';
 import { APP_GUARD } from '@nestjs/core'; // Import APP_GUARD
@@ -18,6 +19,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard'; // Import JwtAuthGuard
       { name: Activity.name, schema: ActivitySchema },
       { name: Proposal.name, schema: ProposalSchema },
       { name: PurchaseTicket.name, schema: PurchaseTicketSchema },
+      { name: LeadSubmission.name, schema: LeadSubmissionSchema }, // Add LeadSubmission
     ]),
     UserModule,
     LoteModule,
@@ -30,6 +32,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard'; // Import JwtAuthGuard
       useClass: JwtAuthGuard,
     },
   ],
+  exports: [LeadService], // Export LeadService
 })
 export class LeadModule {}
 

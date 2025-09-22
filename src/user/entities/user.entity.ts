@@ -88,6 +88,9 @@ export class User {
 
   @Prop()
   createdAt: Date;
+
+  @Prop()
+  lastLogin: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

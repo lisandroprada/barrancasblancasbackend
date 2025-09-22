@@ -10,8 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { LeadService } from './lead.service';
-import { CreateLeadDto } from './dto/create-lead.dto'; // This will be used for admin-created leads
-import { CreateContactLeadDto } from './dto/create-contact-lead.dto'; // For public contact form
+import { CreateLeadManualDto, CreateLeadContactDto } from './dto/create-lead.dto';
+
 import { UpdateLeadDto } from './dto/update-lead.dto';
 import { CreateActivityDto } from './dto/create-activity.dto'; // Import CreateActivityDto
 import { Public, Roles } from '../auth/roles.decorator'; // Import Public and Roles decorator
@@ -33,14 +33,14 @@ export class LeadController {
 
   @Public()
   @Post('contact')
-  createContact(@Body() createContactLeadDto: CreateContactLeadDto) {
-    return this.leadService.createContactLead(createContactLeadDto);
+  createContact(@Body() createLeadContactDto: CreateLeadContactDto) {
+    return this.leadService.createContactLead(createLeadContactDto);
   }
 
   @Post()
   @Roles('admin') // Protect this endpoint for admin-created leads
-  create(@Body() createLeadDto: CreateLeadDto) {
-    return this.leadService.create(createLeadDto);
+  create(@Body() createLeadManualDto: CreateLeadManualDto) {
+    return this.leadService.create(createLeadManualDto);
   }
 
   @Post(':id/register-user')
@@ -68,6 +68,12 @@ export class LeadController {
   @Roles('admin', 'vendedor') // Admin or salesperson can view activities
   findActivities(@Param('id') leadId: string) {
     return this.leadService.findActivitiesByLeadId(leadId);
+  }
+
+  @Get(':id/submissions')
+  @Roles('admin', 'vendedor') // Admin or salesperson can view submissions
+  findSubmissions(@Param('id') leadId: string) {
+    return this.leadService.findSubmissionsByLeadId(leadId);
   }
 
   @Get()

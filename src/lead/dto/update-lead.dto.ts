@@ -1,4 +1,14 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateLeadDto } from './create-lead.dto';
+import { CreateLeadManualDto } from './create-lead.dto';
+import { IsOptional, IsString } from 'class-validator'; // Import necessary decorators
 
-export class UpdateLeadDto extends PartialType(CreateLeadDto) {}
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+export class UpdateLeadDto extends PartialType(CreateLeadManualDto) {
+  @IsOptional()
+  @IsString()
+  asignadoA?: string;
+
+  @IsOptional()
+  @IsString()
+  user?: string;
+}

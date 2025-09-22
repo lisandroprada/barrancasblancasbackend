@@ -10,6 +10,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RolesGuard } from './roles.guard';
 import { NotificationModule } from '../notification/notification.module'; // Import NotificationModule
+import { LeadModule } from '../lead/lead.module'; // Import LeadModule
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { NotificationModule } from '../notification/notification.module'; // Imp
       inject: [ConfigService],
     }),
     NotificationModule, // Add NotificationModule to imports
+    LeadModule, // Add LeadModule to imports
   ],
   controllers: [AuthController],
   providers: [

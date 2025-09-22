@@ -5,6 +5,9 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserDocument } from '../user/entities/user.entity';
 import { NotificationService } from '../notification/notification.service';
+import { LeadService } from '../lead/lead.service'; // Import LeadService
+import { LeadDocument } from '../lead/entities/lead.entity'; // Import LeadDocument
+import { Types } from 'mongoose'; // Import Types
 
 @Injectable()
 export class AuthService {
@@ -12,6 +15,7 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
     private notificationService: NotificationService, // Inject NotificationService
+    private leadService: LeadService, // Inject LeadService
   ) {}
 
   private generateRandomPassword(length = 10): string {
@@ -37,6 +41,13 @@ export class AuthService {
       password: hashedPassword,
     });
 
+    // Check if a lead exists with this email and link it to the new user
+    const existingLead = await this.leadService.findOneByEmail(createUserDto.email);
+    if (existingLead) {
+      existingLead.user = user._id as Types.ObjectId; // Link the lead to the newly created user
+      await existingLead.save();
+    }
+
     // Send the generated password to the user's email
     await this.notificationService.sendEmail(
       createUserDto.email,
@@ -59,6 +70,11 @@ El equipo de Barrancas Blancas`,
     if (!user || !(await bcrypt.compare(pass, user.password))) {
       throw new UnauthorizedException();
     }
+
+    // Update lastLogin field
+    user.lastLogin = new Date();
+    await user.save();
+
     const payload = { username: user.email, sub: user._id, roles: user.roles };
     return {
       access_token: this.jwtService.sign(payload),
