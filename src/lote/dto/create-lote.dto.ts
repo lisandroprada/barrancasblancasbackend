@@ -8,62 +8,75 @@ import {
   IsArray,
   IsBoolean,
 } from 'class-validator';
-import { Caracteristicas, LoteStatus, Propietario, SalesProcessStatus } from '../entities/lote.entity'; // Import LoteStatus and SalesProcessStatus
+import {
+  Caracteristicas,
+  LoteStatus,
+  Propietario,
+  SalesProcessStatus,
+} from '../entities/lote.entity'; // Import LoteStatus and SalesProcessStatus
 
 export class CreateLoteDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'El nombre debe ser un texto.' })
+  @IsNotEmpty({ message: 'El nombre es requerido.' })
   name: string;
 
-  @IsString()
+  @IsString({ message: 'La descripción debe ser un texto.' })
   description: string;
 
-  @IsNumber()
-  @IsNotEmpty()
+  @IsNumber({}, { message: 'El precio debe ser un número.' })
+  @IsNotEmpty({ message: 'El precio es requerido.' })
   price: number;
 
-  @IsString()
+  @IsString({ message: 'La manzana debe ser un texto.' })
   @IsOptional()
   manzana?: string; // New field
 
-  @IsString()
+  @IsString({ message: 'El lote debe ser un texto.' })
   @IsOptional()
   lote?: string; // New field
 
-  @IsNumber()
+  @IsNumber({}, { message: 'Los m2 deben ser un número.' })
   @IsOptional()
   m2?: number;
 
-  @IsNumber()
+  @IsNumber({}, { message: 'Los metros de frente deben ser un número.' })
   @IsOptional()
   metros_frente?: number;
 
-  @IsArray()
-  @IsEnum(Caracteristicas, { each: true })
+  @IsArray({ message: 'Las características deben ser un arreglo.' })
+  @IsEnum(Caracteristicas, {
+    each: true,
+    message: 'Característica no válida.',
+  })
   @IsOptional()
   caracteristicas?: Caracteristicas[];
 
-  @IsEnum(Propietario)
-  @IsNotEmpty()
+  @IsEnum(Propietario, { message: 'Propietario no válido.' })
+  @IsNotEmpty({ message: 'El propietario es requerido.' })
   propietario: Propietario;
 
-  @IsEnum(SalesProcessStatus)
+  @IsEnum(SalesProcessStatus, {
+    message: 'Estado de proceso de venta no válido.',
+  })
   @IsOptional()
   estadoProcesoVenta?: SalesProcessStatus;
 
-  @IsBoolean()
+  @IsBoolean({ message: 'Destacado debe ser un booleano.' })
   @IsOptional()
   featured?: boolean;
 
-  @IsEnum(LoteStatus)
+  @IsEnum(LoteStatus, { message: 'Estado no válido.' })
   @IsOptional()
   status?: LoteStatus;
 
-  @IsString()
+  @IsString({ message: 'El ID de cliente debe ser un texto.' })
   @IsOptional()
   clientId?: string;
 
-  @IsDateString()
+  @IsDateString(
+    {},
+    { message: 'La fecha de reserva debe ser una fecha válida.' },
+  )
   @IsOptional()
   reservationDate?: Date;
 }

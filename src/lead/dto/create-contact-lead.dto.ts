@@ -2,20 +2,20 @@ import { IsString, IsEmail, IsNotEmpty, IsOptional, IsEnum } from 'class-validat
 import { LeadSource, LeadStatus } from '../entities/lead.entity';
 
 export class CreateContactLeadDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'El nombre debe ser un texto.' })
+  @IsNotEmpty({ message: 'El nombre es requerido.' })
   nombre: string;
 
-  @IsEmail()
-  @IsNotEmpty()
+  @IsEmail({}, { message: 'El email debe ser un correo electrónico válido.' })
+  @IsNotEmpty({ message: 'El email es requerido.' })
   email: string;
 
-  @IsString()
+  @IsString({ message: 'El teléfono debe ser un texto.' })
   @IsOptional()
   telefono?: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'El tipo de consulta debe ser un texto.' })
+  @IsNotEmpty({ message: 'El tipo de consulta es requerido.' })
   tipoConsulta: string; // New field for the contact form
 
   // These fields will be set by the service, not directly from the contact form
